@@ -61,14 +61,16 @@ class UserAPIView(GenericAPIView):
         user = serializer.save()
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data
-        })
+        }, status=status.HTTP_201_CREATED)
 
 
 class UserFromTokenAPIView(GenericAPIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, format=None):
-        user = get_user_by_token(self.request.COOKIES.get("access_token"))
-        return Response({
-            "user": UserSerializer(user).data
-        })
+        if self.request.COOKIES.get("access_token"):
+            user = get_user_by_token(self.request.COOKIES.get("access_token"))
+            return Response({
+                "user": UserSerializer(user).data
+            })
+        return Response({"Invalid" : "You must be logged in!"}, status=status.HTTP_404_NOT_FOUND)

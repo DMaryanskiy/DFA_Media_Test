@@ -4,7 +4,7 @@ from rest_framework import routers
 from .views import GalleryViewSet, GalleryDelete
 
 router = routers.DefaultRouter()
-router.register(r"", GalleryViewSet)
+router.register(r"", GalleryViewSet, basename="gallery_crud")
 
 urlpatterns = [
     path("delete/all/", GalleryDelete.as_view(), name="delete_all"),
